@@ -1,0 +1,31 @@
+<h1 [ngStyle]="{color: 'blue'}">Liste des tâches à réaliser</h1>
+<p>Nous sommes le {{ today|date: 'short' }}</p>
+<ul class="list-group">
+  <li class="list-group-item" *ngFor="let todo of todos, let i = index">
+
+    <div [ngClass]="{inProgress:todo.todoStatus,finished:!todo.todoStatus}"> <!-- ngClass -->
+      <a [href]="todo.image" target="_blank">
+        <img [src]="todo.image"> <!-- propriety binding, attribut -->
+      </a>
+
+      <!--{{ todo|json }}-->
+      <!--{{ todo|async }} (utilisé dans une information provenant d'un serveur extérieur)-->
+
+      {{ todo.todoName|titlecase }} <!-- interpolation, entre balise ouvrante/fermante -->
+
+      <button class="btn btn-primary me-1" [disabled]="todo.todoStatus" (click)="onChangeStatus(i)"> <!-- event biding (action)="state" -->
+        En cours
+      </button>
+      <button class="btn btn-success me-1" [disabled]="!todo.todoStatus" (click)="onChangeStatus(i)">
+        Terminée
+      </button>
+
+      <!-- Action de modification -->
+      <button *ngIf="!todo.isModif" class="btn btn-danger me-1" [disabled]="todo.isModif" (click)="onChangeIsModif(i)">Modifier</button>
+      <button *ngIf="todo.isModif" class="btn btn-success me-1" [disabled]="!todo.isModif" (click)="onChangeIsModif(i)">Modification terminée</button>
+      <button class="btn btn-success mr-1" (click)="onView(i)">En savoir plus</button>
+    </div>
+
+    <input *ngIf="todo.isModif" class="form-control mt-1" [(ngModel)]="todo.todoName"> <!-- Two-way binding -->
+  </li>
+</ul>

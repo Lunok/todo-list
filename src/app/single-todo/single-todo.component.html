@@ -1,0 +1,10 @@
+<p *ngIf="error">{{ error }}</p>
+
+<div class="card" style="width: 18rem;">
+  <img class="card-img-top" [src]="todo.image" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{ todo.todoName }}</h5>
+    <p class="card-text"><strong>Description :</strong> {{ todo.description }}</p>
+    <a href="#" class="btn btn-primary" routerLink="/todos">Retour</a>
+  </div>
+</div>
