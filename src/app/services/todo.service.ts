@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
+import { Todo } from "../model/todo.model";
 
 // 3 niveaux d'injection: app.module.ts (toute l'application), app.component.ts (tous les components), specific component.
 @Injectable({
@@ -8,46 +9,47 @@ import { Subject } from "rxjs";
 
 export class TodoService {
   today = new Date();
-  todos;
+  todos: Todo[];
   todosSubject = new Subject<any[]>();
 
   constructor() {
 
     setTimeout(() => {
+
       this.todos = [
         {
           todoName: "Project 1",
           todoStatus: true,
-          image: "http://placehold.it/150",
+          urlCover: "http://placeimg.com/250/250/tech",
           isModif: false,
-          description: "Lorem Ipsum is simply dummy text \
+          todoDescription: "Lorem Ipsum is simply dummy text \
           of the printing and typesetting industry. Lorem \
           Ipsum has been the industry",
         },
         {
           todoName: "Project 2",
           todoStatus: false,
-          image: "http://placehold.it/150",
+          urlCover: "http://placeimg.com/250/250/animal",
           isModif: false,
-          description: "Lorem Ipsum is simply dummy text \
+          todoDescription: "Lorem Ipsum is simply dummy text \
           of the printing and typesetting industry. Lorem \
           Ipsum has been the industry",
         },
         {
           todoName: "Project 3",
           todoStatus: true,
-          image: "http://placehold.it/150",
+          urlCover: "http://placeimg.com/250/250/nature",
           isModif: false,
-          description: "Lorem Ipsum is simply dummy text \
+          todoDescription: "Lorem Ipsum is simply dummy text \
           of the printing and typesetting industry. Lorem \
           Ipsum has been the industry",
         },
         {
           todoName: "Project 4",
           todoStatus: false,
-          image: "http://placehold.it/150",
+          urlCover: "http://placeimg.com/250/250/architecture",
           isModif: false,
-          description: "Lorem Ipsum is simply dummy text \
+          todoDescription: "Lorem Ipsum is simply dummy text \
           of the printing and typesetting industry. Lorem \
           Ipsum has been the industry",
         },
@@ -174,5 +176,10 @@ export class TodoService {
     }
 
     return false;
+  }
+
+  AddTodo(todo: Todo): void {
+    this.todos.unshift(todo);
+    this.emitTodos();
   }
 }

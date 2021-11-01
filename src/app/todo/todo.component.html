@@ -1,4 +1,4 @@
-<h1 [ngStyle]="{color: 'black'}" class="mt-5 text-center">
+<h1 [ngStyle]="{color: 'black'}" class="text-center">
   Liste des tâches à réaliser
 </h1>
 <p class="text-center">
@@ -9,7 +9,7 @@
   <li class="list-group-item" *ngFor="let todo of todos, let i = index">
     <div [ngClass]="{inProgress:todo.todoStatus,finished:!todo.todoStatus}"> <!-- ngClass -->
       <a [href]="todo.image" target="_blank">
-        <img [src]="todo.image"> <!-- propriety binding, attribut -->
+        <img [src]="todo.urlCover"> <!-- propriety binding, attribut -->
       </a>
 
       <!--{{ todo|json }}-->
