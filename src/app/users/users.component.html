@@ -1,1 +1,13 @@
-<a class="btn btn-success mt2" routerLink="/add-user">Ajouter un utilisateur</a>
+<h1 class="text-center">Liste des utilisateurs</h1>
+
+<a class="btn btn-success col-4 center-block" routerLink="/add-user">
+  Ajouter un nouvel utilisateur
+</a>
+
+<ul class="list-group mt-1">
+  <li class="list-group-item" *ngFor="let user of users">
+    <p>Prénom : {{ user.firstname }}</p>
+    <p>Nom : {{ user.lastname }}</p>
+    <p>Description : {{ user.description }}</p>
+  </li>
+</ul>

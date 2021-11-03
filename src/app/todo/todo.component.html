@@ -8,7 +8,7 @@
 <ul class="list-group mt-5">
   <li class="list-group-item" *ngFor="let todo of todos, let i = index">
     <div [ngClass]="{inProgress:todo.todoStatus,finished:!todo.todoStatus}"> <!-- ngClass -->
-      <a [href]="todo.image" target="_blank">
+      <a [href]="todo.urlCover" target="_blank">
         <img [src]="todo.urlCover"> <!-- propriety binding, attribut -->
       </a>
 
