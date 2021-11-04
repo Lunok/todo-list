@@ -1,3 +1,4 @@
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 import { Todo } from "../model/todo.model";
@@ -12,52 +13,12 @@ export class TodoService {
   todos: Todo[];
   todosSubject = new Subject<any[]>();
 
-  constructor() {
+  constructor(private httpClient: HttpClient) {
 
     setTimeout(() => {
+      this.getTodosFromServer();
+    });
 
-      this.todos = [
-        {
-          todoName: "Project 1",
-          todoStatus: true,
-          urlCover: "http://placeimg.com/250/250/tech",
-          isModif: false,
-          todoDescription: "Lorem Ipsum is simply dummy text \
-          of the printing and typesetting industry. Lorem \
-          Ipsum has been the industry",
-        },
-        {
-          todoName: "Project 2",
-          todoStatus: false,
-          urlCover: "http://placeimg.com/250/250/animal",
-          isModif: false,
-          todoDescription: "Lorem Ipsum is simply dummy text \
-          of the printing and typesetting industry. Lorem \
-          Ipsum has been the industry",
-        },
-        {
-          todoName: "Project 3",
-          todoStatus: true,
-          urlCover: "http://placeimg.com/250/250/nature",
-          isModif: false,
-          todoDescription: "Lorem Ipsum is simply dummy text \
-          of the printing and typesetting industry. Lorem \
-          Ipsum has been the industry",
-        },
-        {
-          todoName: "Project 4",
-          todoStatus: false,
-          urlCover: "http://placeimg.com/250/250/architecture",
-          isModif: false,
-          todoDescription: "Lorem Ipsum is simply dummy text \
-          of the printing and typesetting industry. Lorem \
-          Ipsum has been the industry",
-        },
-      ];
-
-      // Send the new values to the subscribers
-      this.emitTodos();
-    }, 1000);
     /*
     this.lastUpdate = Promise.resolve(new Date()); // Instant resolve
     this.lastUpdate = Promise.reject("erreur"); // Instant reject
@@ -162,12 +123,14 @@ export class TodoService {
   onChangeStatus(i: number) {
     this.todos[i].todoStatus = !this.todos[i].todoStatus;
     this.emitTodos();
+    this.saveTodosFromServer();
   }
 
   // Each time the value change, we update the subscribers with the new value by calling emitTodos() function
   onChangeIsModif(i: number) {
     this.todos[i].isModif = !this.todos[i].isModif;
     this.emitTodos();
+    this.saveTodosFromServer();
   }
 
   getTodo(index: number) {
@@ -181,5 +144,35 @@ export class TodoService {
   AddTodo(todo: Todo): void {
     this.todos.unshift(todo);
     this.emitTodos();
+    this.saveTodosFromServer();
+  }
+
+  saveTodosFromServer(): void {
+    this.httpClient
+    .put("https://todo-list-app-ee4a4-default-rtdb.europe-west1.firebasedatabase.app/todos.json", this.todos)
+    .subscribe(
+      () => {
+        console.log("Modifications enregistrées avec succès.")
+      },
+      (error) => {
+        console.log("Une erreur est survenue lors de l'enregistrement des modifications.")
+      }
+    );
+  }
+
+  getTodosFromServer(): void {
+    this.httpClient.get<Todo[]>("https://todo-list-app-ee4a4-default-rtdb.europe-west1.firebasedatabase.app/todos.json")
+    .subscribe(
+      (todos: Todo[]) => {
+        this.todos = todos;
+        this.emitTodos();
+      },
+      (error) => {
+        console.log("Une erreur est survenue lors de la récupération des données.");
+      },
+      () => {
+        console.log("Les données ont bien été actualisées.");
+      }
+    );
   }
 }

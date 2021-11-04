@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { stringify } from 'querystring';
 import { Address } from 'src/app/model/address.model';
@@ -33,13 +33,23 @@ export class AddUserComponent implements OnInit {
         state: this.formBuilder.control("", [Validators.required]),
         zip: this.formBuilder.control("", [Validators.required, Validators.pattern("^[a-z0-9][a-z0-9\- ]{0,10}[a-z0-9]$")]),
         city: this.formBuilder.control("", [Validators.required])
-      })
+      }),
+      aliases: this.formBuilder.array([]),
     });
+  }
+
+  getAliases(): FormArray {
+    return this.userForm.get("aliases") as FormArray;
+  }
+
+  addAliases(): void {
+    this.getAliases().push(this.formBuilder.control("", Validators.required));
   }
 
   onSubmit(): void {
     const dataUser = this.userForm.value;
     const address = new Address(dataUser.street, dataUser.city, dataUser.state, dataUser.zip);
+    const alias = dataUser.aliases ? dataUser.aliases : [];
 
     const user = new User
     (
@@ -48,7 +58,8 @@ export class AddUserComponent implements OnInit {
       dataUser.email,
       address,
       dataUser.description,
-      dataUser.dateBirth
+      dataUser.dateBirth,
+      alias
     );
 
     this.userService.addUser(user);

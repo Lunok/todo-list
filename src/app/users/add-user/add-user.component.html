@@ -14,6 +14,16 @@
         <input class="form-control m-1" type="text" formControlName="lastname" required>
       </div>
 
+      <div class="form-group" formArrayName="aliases">
+        <button type="button" class="btn btn-success btn-lg m-1" (click)="addAliases()">
+          Ajouter un surnom
+        </button>
+
+        <div *ngFor="let alias of getAliases().controls; let i = index">
+          <input class="form-control m-1" type="text" [formControlName]=i>
+        </div>
+      </div>
+
       <div class="form-group">
         <label for="email">Email :</label>
         <input class="form-control m-1" type="email" formControlName="email" required>
